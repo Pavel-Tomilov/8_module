@@ -8,8 +8,15 @@ const ComponentA = () => {
   /* Устанавливаем стейт счетчика */
   const [count, setCount] = useState(0);
   const onClick = () => setCount(current => current + 1);
+
+  const isBlack = count % 2 === 0;
+
+
   return (
-    <div className="component">
+    <div className="component" style={
+      isBlack
+        ? { backgroundColor: '#000000' }
+        : { backgroundColor: 'initial' }}>
       <h3>Component A</h3>
       <p>{`Show result value: ${count}`}</p>
       <button className="button" onClick={onClick}>

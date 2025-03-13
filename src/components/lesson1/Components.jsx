@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { list } from "./stubs";
 import { slowFunction } from "./utils";
 import "../styles.css";
@@ -9,20 +9,20 @@ const ComponentA = () => {
   const [count, setCount] = useState(0);
   const onClick = () => setCount(current => current + 1);
 
-  const isBlack = count % 2 === 0;
+  const testProp = useMemo(() => () => 10, []);
+
+
 
 
   return (
-    <div className="component" style={
-      isBlack
-        ? { backgroundColor: '#000000' }
-        : { backgroundColor: 'initial' }}>
+    <div className="component">
       <h3>Component A</h3>
       <p>{`Show result value: ${count}`}</p>
       <button className="button" onClick={onClick}>
         Update count
       </button>
-      <ComponentB />
+      <MemoComponentB testProp={testProp} />
+      <ComponentCList />
     </div>
   );
 
@@ -32,26 +32,19 @@ const ComponentA = () => {
 
 const ComponentB = ({ testProp }) => {
 
-
   /* Ф-я, выполняющая достаточно трудоемкий код */
   const result = slowFunction();
 
   return (
     <div className="component">
       <h3>Component B</h3>
-      <p>{`Show result value: ${result}`}</p>
+      <p>{`Show result value: ${testProp.testCount}`}</p>
 
     </div>
   );
 };
 
-const MemoComponentB = memo(ComponentB, (prev, next) => {
-  if (prev.testProp.testCount === next.testProp.testCount) {
-    return true;
-  }
-  return false;
-})
-
+const MemoComponentB = memo(ComponentB)
 
 /** Пример тяжелого рендеринга */
 const ComponentCList = () => {
